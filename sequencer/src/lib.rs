@@ -27,7 +27,6 @@ use espresso_types::{
 };
 use genesis::L1Finalized;
 use hotshot_libp2p_networking::network::behaviours::dht::store::persistent::DhtNoPersistence;
-use hotshot_query_service::data_source::storage::SqlStorage;
 use libp2p::Multiaddr;
 use network::libp2p::split_off_peer_id;
 use options::Identity;
@@ -35,6 +34,8 @@ use proposal_fetcher::ProposalFetcherConfig;
 use tokio::select;
 use tracing::info;
 use url::Url;
+
+use crate::request_response::data_source::Storage as RequestResponseStorage;
 pub mod persistence;
 pub mod state;
 use std::{fmt::Debug, marker::PhantomData, time::Duration};
@@ -197,7 +198,7 @@ pub async fn init_node<P: SequencerPersistence + MembershipPersistence, V: Versi
     metrics: &dyn Metrics,
     persistence: P,
     l1_params: L1Params,
-    storage: Option<Arc<SqlStorage>>,
+    storage: Option<RequestResponseStorage>,
     seq_versions: V,
     event_consumer: impl EventConsumer + 'static,
     is_da: bool,
@@ -1117,7 +1118,7 @@ pub mod testing {
             mut state: ValidatedState,
             mut persistence_opt: P,
             state_peers: Option<impl StateCatchup + 'static>,
-            storage: Option<Arc<SqlStorage>>,
+            storage: Option<RequestResponseStorage>,
             metrics: &dyn Metrics,
             stake_table_capacity: usize,
             event_consumer: impl EventConsumer + 'static,
