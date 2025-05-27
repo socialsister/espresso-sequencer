@@ -10,6 +10,9 @@ use espresso_types::{
     Leaf2, NetworkConfig,
 };
 use hotshot::{types::BLSPubKey, InitializerEpochInfo};
+use hotshot_libp2p_networking::network::behaviours::dht::store::persistent::{
+    DhtPersistentStorage, SerializableRecord,
+};
 use hotshot_types::{
     data::{
         vid_disperse::{ADVZDisperseShare, VidDisperseShare2},
@@ -287,5 +290,18 @@ impl MembershipPersistence for NoStorage {
         Vec<(EventKey, StakeTableEvent)>,
     )> {
         Ok((None, Vec::new()))
+    }
+}
+
+#[async_trait]
+impl DhtPersistentStorage for NoStorage {
+    /// Don't do anything
+    async fn save(&self, _records: Vec<SerializableRecord>) -> anyhow::Result<()> {
+        Ok(())
+    }
+
+    /// Don't do anything
+    async fn load(&self) -> anyhow::Result<Vec<SerializableRecord>> {
+        Ok(vec![])
     }
 }
