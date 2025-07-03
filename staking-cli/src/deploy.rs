@@ -270,16 +270,17 @@ impl TestSystem {
     pub fn args(&self, cmd: &mut Command, signer: Signer) {
         cmd.arg("--rpc-url")
             .arg(self.rpc_url.to_string())
-            .arg("--token-address")
-            .arg(self.token.to_string())
             .arg("--stake-table-address")
             .arg(self.stake_table.to_string())
             .arg("--account-index")
             .arg("0");
 
         match signer {
-            Signer::Mnemonic => cmd.arg("--mnemonic").arg(DEV_MNEMONIC),
             Signer::Ledger => cmd.arg("--ledger"),
+            Signer::Mnemonic => cmd.arg("--mnemonic").arg(DEV_MNEMONIC),
+            Signer::BrokeMnemonic => cmd
+                .arg("--mnemonic")
+                .arg("roast term reopen pave choose high rally trouble upon govern hollow stand"),
         };
     }
 }
@@ -288,6 +289,7 @@ impl TestSystem {
 pub enum Signer {
     Ledger,
     Mnemonic,
+    BrokeMnemonic,
 }
 
 #[cfg(test)]

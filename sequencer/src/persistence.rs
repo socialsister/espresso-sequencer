@@ -1505,9 +1505,6 @@ mod tests {
         let st_addr = contracts
             .address(Contract::StakeTableProxy)
             .expect("StakeTableProxy deployed");
-        let token_addr = contracts
-            .address(Contract::EspTokenProxy)
-            .expect("EspTokenProxy deployed");
         let l1_url = network_config.l1_url().clone();
 
         // new block every 1s
@@ -1527,7 +1524,6 @@ mod tests {
                         l1_url,
                         &deployer,
                         st_addr,
-                        token_addr,
                         validators,
                         DelegationConfig::MultipleDelegators,
                     )
