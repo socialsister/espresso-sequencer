@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["NamedSemaphoreError"],"struct":["BoundedVecDeque","NamedSemaphore","NamedSemaphorePermit"]};

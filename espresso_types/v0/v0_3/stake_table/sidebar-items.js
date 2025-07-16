@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EventSortingError","ExpectedStakeTableError","FetchRewardError","StakeTableError","StakeTableEvent"],"struct":["CombinedStakeTable","DAMembers","Delegator","Fetcher","StakeTable","StakeTableUpdateTask","Validator"],"type":["EventKey","IndexedStake"]};

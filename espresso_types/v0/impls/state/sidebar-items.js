@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BuilderValidationError","ProposalValidationError","StateValidationError"],"fn":["get_l1_deposits","validate_builder_fee"],"struct":["Proposal","ValidatedState","ValidatedTransition"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EventType","HotShotAction","LegacyEventType"],"mod":["error_adaptor"],"struct":["Event","LeafInfo","LegacyEvent","LegacyLeafInfo"],"type":["LeafChain","LegacyLeafChain"]};
