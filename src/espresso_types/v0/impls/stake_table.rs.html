@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `types/src/v0/impls/stake_table.rs`."><title>stake_table.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="espresso_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.96.1 (31fca3adb 2026-06-26)" data-channel="1.96.1" data-search-js="search-b5634cc7.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../../static.files/storage-41dd4d93.js"></script><script defer src="../../../../static.files/src-script-813739b1.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">espresso_types/v0/impls/</div>stake_table.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `types/src/v0/impls/stake_table.rs`."><title>stake_table.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="espresso_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.97.0 (2d8144b78 2026-07-07)" data-channel="1.97.0" data-search-js="search-fd9372ac.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../../static.files/storage-41dd4d93.js"></script><script defer src="../../../../static.files/src-script-813739b1.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-fcd733ba.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">espresso_types/v0/impls/</div>stake_table.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    cmp::{max, min},
 <a href=#3 id=3 data-nosnippet>3</a>    collections::{BTreeMap, BTreeSet, HashMap, HashSet},
 <a href=#4 id=4 data-nosnippet>4</a>    future::Future,
@@ -49,12 +49,12 @@
 <a href=#49 id=49 data-nosnippet>49</a>
 <a href=#50 id=50 data-nosnippet>50</a><span class="attr">#[cfg(any(test, feature = <span class="string">"testing"</span>))]
 <a href=#51 id=51 data-nosnippet>51</a></span><span class="kw">use </span><span class="kw">super</span>::v0_3::DAMembers;
-<a href=#52 id=52 data-nosnippet>52</a><span class="kw">use </span>super::{
+<a href=#52 id=52 data-nosnippet>52</a><span class="kw">use super</span>::{
 <a href=#53 id=53 data-nosnippet>53</a>    traits::{MembershipPersistence, StateCatchup},
 <a href=#54 id=54 data-nosnippet>54</a>    v0_3::{ChainConfig, EventKey, Fetcher, StakeTableEvent, StakeTableUpdateTask, Validator},
 <a href=#55 id=55 data-nosnippet>55</a>    Header, L1Client, Leaf2, PubKey, SeqTypes,
 <a href=#56 id=56 data-nosnippet>56</a>};
-<a href=#57 id=57 data-nosnippet>57</a><span class="kw">use </span>crate::{
+<a href=#57 id=57 data-nosnippet>57</a><span class="kw">use crate</span>::{
 <a href=#58 id=58 data-nosnippet>58</a>    traits::EventsPersistenceRead,
 <a href=#59 id=59 data-nosnippet>59</a>    v0_1::{L1Provider, RewardAmount, BLOCKS_PER_YEAR, COMMISSION_BASIS_POINTS, INFLATION_RATE},
 <a href=#60 id=60 data-nosnippet>60</a>    v0_3::{EventSortingError, ExpectedStakeTableError, FetchRewardError, StakeTableError},
@@ -1283,7 +1283,7 @@
 <a href=#1283 id=1283 data-nosnippet>1283</a>
 <a href=#1284 id=1284 data-nosnippet>1284</a>    <span class="attr">#[cfg(any(test, feature = <span class="string">"testing"</span>))]
 <a href=#1285 id=1285 data-nosnippet>1285</a>    </span><span class="kw">pub fn </span>mock() -&gt; <span class="self">Self </span>{
-<a href=#1286 id=1286 data-nosnippet>1286</a>        <span class="kw">use </span>crate::{mock, v0_1::NoStorage};
+<a href=#1286 id=1286 data-nosnippet>1286</a>        <span class="kw">use crate</span>::{mock, v0_1::NoStorage};
 <a href=#1287 id=1287 data-nosnippet>1287</a>        <span class="kw">let </span>chain_config = ChainConfig::default();
 <a href=#1288 id=1288 data-nosnippet>1288</a>        <span class="kw">let </span>l1 = L1Client::new(<span class="macro">vec!</span>[<span class="string">"http://localhost:3331"</span>.parse().unwrap()])
 <a href=#1289 id=1289 data-nosnippet>1289</a>            .expect(<span class="string">"Failed to create L1 client"</span>);
@@ -2001,7 +2001,7 @@
 <a href=#2001 id=2001 data-nosnippet>2001</a>    <span class="kw">use </span>hotshot_types::{light_client::StateKeyPair, signature_key::BLSKeyPair};
 <a href=#2002 id=2002 data-nosnippet>2002</a>    <span class="kw">use </span>rand::{Rng <span class="kw">as _</span>, RngCore <span class="kw">as _</span>};
 <a href=#2003 id=2003 data-nosnippet>2003</a>
-<a href=#2004 id=2004 data-nosnippet>2004</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
+<a href=#2004 id=2004 data-nosnippet>2004</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#2005 id=2005 data-nosnippet>2005</a>
 <a href=#2006 id=2006 data-nosnippet>2006</a>    <span class="comment">// TODO: current tests are just sanity checks, we need more.
 <a href=#2007 id=2007 data-nosnippet>2007</a>
@@ -2137,8 +2137,8 @@
 <a href=#2137 id=2137 data-nosnippet>2137</a>    <span class="kw">use </span>rstest::rstest;
 <a href=#2138 id=2138 data-nosnippet>2138</a>    <span class="kw">use </span>sequencer_utils::test_utils::setup_test;
 <a href=#2139 id=2139 data-nosnippet>2139</a>
-<a href=#2140 id=2140 data-nosnippet>2140</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
-<a href=#2141 id=2141 data-nosnippet>2141</a>    <span class="kw">use </span>crate::{v0::impls::testing::<span class="kw-2">*</span>, L1ClientOptions};
+<a href=#2140 id=2140 data-nosnippet>2140</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#2141 id=2141 data-nosnippet>2141</a>    <span class="kw">use crate</span>::{v0::impls::testing::<span class="kw-2">*</span>, L1ClientOptions};
 <a href=#2142 id=2142 data-nosnippet>2142</a>
 <a href=#2143 id=2143 data-nosnippet>2143</a>    <span class="attr">#[test]
 <a href=#2144 id=2144 data-nosnippet>2144</a>    </span><span class="kw">fn </span>test_from_l1_events() -&gt; anyhow::Result&lt;()&gt; {
